@@ -15,9 +15,9 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 	exit;
 }
 
-DATABASE_NAME = "nodos_126";
-DATABASE_USER = "root";
-DATABASE_PASSWORD = "admin";
+DATABASE_NAME = "";
+DATABASE_USER = "";
+DATABASE_PASSWORD = "";
 
 
 ## Uncomment this to disable output compression
