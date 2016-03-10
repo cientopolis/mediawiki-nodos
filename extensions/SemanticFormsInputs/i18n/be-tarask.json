@@ -5,10 +5,5 @@
 			"Jim-by"
 		]
 	},
-	"semanticformsinputs-desc": "Дадатковыя тыпы ўводу для [https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:Semantic_Forms сэмантычных формаў]",
-	"semanticformsinputs-wrongformat": "Няслушны фармат.",
-	"semanticformsinputs-close": "Закрыць",
-	"semanticformsinputs-prev": "Папярэдняе",
-	"semanticformsinputs-next": "Наступнае",
-	"semanticformsinputs-today": "Сёньня"
+	"semanticformsinputs-desc": "Дадатковыя тыпы ўводу для [https://www.mediawiki.org/wiki/Special:MyLanguage/Extension:Semantic_Forms сэмантычных формаў]"
 }

@@ -18,7 +18,7 @@
 
     public function __construct( $input_number, $cur_value, $input_name, $disabled, $other_args ) {
         parent::__construct( $input_number, $cur_value, $input_name, $disabled, $other_args );
-        $this->addJsInitFunctionData( 'SFI_TwoListboxes_init', $this->setupJsInitAttribs() );
+        $this->addJsInitFunctionData( 'SFI_TwoListboxes_init' );
     }
 
     public static function getName() {
@@ -36,16 +36,5 @@
 
     public static function canHandleLists() {
     		return true;
-    }
-
-    /**
-     * Prepares attributes for javascript that will be run.
-     *
-     * <b>It's a stub now</b>
-     * @return string attributes for javascript file
-     */
-    private function setupJsInitAttribs() {
-        $jsattribs = array();
-        return json_encode( $jsattribs );
     }
 }

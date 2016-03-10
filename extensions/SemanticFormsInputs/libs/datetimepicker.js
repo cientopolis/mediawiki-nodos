@@ -33,7 +33,7 @@ window.SFI_DTP_init = function( inputId, params ) {
 			for ( var index in params.subinputsInitData[subinputId] ) {
 				if( params.subinputsInitData[subinputId][index] ) {
 					var fn = window[ params.subinputsInitData[subinputId][index]['name'] ];
-					var param = JSON.parse( params.subinputsInitData[subinputId][index]['param'] );
+					var param = params.subinputsInitData[subinputId][index]['param'];
 
 					if ( typeof fn === 'function' )	{
 						fn( subinputId, param );

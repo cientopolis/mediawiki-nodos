@@ -134,7 +134,11 @@ class SFTemplateField {
 		$this->mCargoField = $fieldName;
 
 		if ( is_null( $fieldDescription ) ) {
-			$tableSchemas = CargoUtils::getTableSchemas( array( $tableName ) );
+			try {
+				$tableSchemas = CargoUtils::getTableSchemas( array( $tableName ) );
+			} catch ( MWException $e ) {
+				return;
+			}
 			if ( count( $tableSchemas ) == 0 ) {
 				return;
 			}
@@ -157,7 +161,12 @@ class SFTemplateField {
 			$this->mFieldType = $fieldDescription->mType;
 		}
 		$this->mIsList = $fieldDescription->mIsList;
-		$this->mDelimiter = $fieldDescription->mDelimiter;
+		if ( method_exists( $fieldDescription, 'getDelimiter' ) ) {
+			// Cargo 0.11+
+			$this->mDelimiter = $fieldDescription->getDelimiter();
+		} else {
+			$this->mDelimiter = $fieldDescription->mDelimiter;
+		}
 		$this->mPossibleValues = $fieldDescription->mAllowedValues;
 	}
 

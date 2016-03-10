@@ -41,7 +41,7 @@ class SFIMenuSelect extends SFFormInput {
 
 		self::setup();
 
-		$this->addJsInitFunctionData( 'SFI_MS_init', 'null' );
+		$this->addJsInitFunctionData( 'SFI_MS_init' );
 
 
 	}
@@ -156,13 +156,13 @@ class SFIMenuSelect extends SFFormInput {
 		$params['structure'] = array(
 			'name' => 'structure',
 			'type' => 'text',
-			'description' => wfMsg( 'semanticformsinputs-menuselect-structure' ),
+			'description' => wfMessage( 'semanticformsinputs-menuselect-structure' )->text(),
 			'default' => "* item 1\n** item 11\n** item 12\n* item 2\n** item 21\n** item 22"
 		);
 		$params[$sfigSettings->menuSelectDisableInputField?'enable input field':'disable input field'] = array(
 			'name' => $sfigSettings->menuSelectDisableInputField?'enable input field':'disable input field',
 			'type' => 'boolean',
-			'description' => wfMsg( 'semanticformsinputs-menuselect-enableinputfield' ),
+			'description' => wfMessage( 'semanticformsinputs-menuselect-enableinputfield' )->text(),
 		);
 		return $params;
 	}

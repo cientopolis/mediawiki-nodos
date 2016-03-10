@@ -2,6 +2,6 @@
 host=gerrit.wikimedia.org
 port=29418
 project=mediawiki/extensions/SemanticForms
-defaultbranch=REL1_26
+defaultbranch=master
 defaultrebase=0
 defaultremote=origin

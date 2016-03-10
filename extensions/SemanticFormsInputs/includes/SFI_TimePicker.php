@@ -2,7 +2,7 @@
 
 /**
  * File holding the SFI_TimePicker class
- * 
+ *
  * @author Stephan Gambke
  * @file
  * @ingroup SemanticFormsInputs
@@ -17,7 +17,7 @@ if ( !defined( 'SFI_VERSION' ) ) {
  * @ingroup SemanticFormsInputs
  */
 class SFITimePicker extends SFFormInput {
-	
+
 	/**
 	 * Constructor.
 	 *
@@ -34,11 +34,11 @@ class SFITimePicker extends SFFormInput {
 	 *		input definition.
 	 */
 	public function __construct( $input_number, $cur_value, $input_name, $disabled, $other_args ) {
-		
+
 		parent::__construct( $input_number, $cur_value, $input_name, $disabled, $other_args );
-		
+
 		$this->addJsInitFunctionData( 'SFI_TP_init', $this->setupJsInitAttribs() );
-			
+
 	}
 
 	/**
@@ -55,7 +55,7 @@ class SFITimePicker extends SFFormInput {
 
 	/**
 	 * Set up JS attributes
-	 * 
+	 *
 	 * @return String
 	 */
 	protected function setupJsInitAttribs() {
@@ -108,7 +108,7 @@ class SFITimePicker extends SFFormInput {
 			$jsattribs['partOfDTP'] = $this->mOtherArgs['part of dtp'];
 		}
 
-		// setup attributes required only for either disabled or enabled datepickers
+		// setup attributes required only for either disabled or enabled timepickers
 		if ( $this->mIsDisabled ) {
 
 			$jsattribs['buttonImage'] = $sfigSettings->scriptPath . '/images/TimePickerButtonDisabled.gif';
@@ -131,8 +131,8 @@ class SFITimePicker extends SFFormInput {
 
 			}
 		}
-		
-		return json_encode( $jsattribs );
+
+		return $jsattribs;
 	}
 
 	/**
@@ -175,49 +175,49 @@ class SFITimePicker extends SFFormInput {
 
 	/**
 	 * Returns the set of parameters for this form input.
-	 * 
+	 *
 	 * TODO: Specify parameters specific for menuselect.
 	 */
 	public static function getParameters() {
-		
+
 		global $sfigSettings;
-		
+
 		$params = parent::getParameters();
 		$params['mintime'] = array(
 			'name' => 'mintime',
 			'type' => 'string',
-			'description' => wfMsg( 'semanticformsinputs-timepicker-mintime' ),
+			'description' => wfMessage( 'semanticformsinputs-timepicker-mintime' )->text(),
 		);
 		$params['maxtime'] = array(
 			'name' => 'maxtime',
 			'type' => 'string',
-			'description' => wfMsg( 'semanticformsinputs-timepicker-maxtime' ),
+			'description' => wfMessage( 'semanticformsinputs-timepicker-maxtime' )->text(),
 		);
 		$params['interval'] = array(
 			'name' => 'interval',
 			'type' => 'int',
-			'description' => wfMsg( 'semanticformsinputs-timepicker-interval' ),
+			'description' => wfMessage( 'semanticformsinputs-timepicker-interval' )->text(),
 		);
 		$params[$sfigSettings->timePickerDisableInputField?'enable input field':'disable input field'] = array(
 			'name' => $sfigSettings->timePickerDisableInputField?'enable input field':'disable input field',
 			'type' => 'boolean',
-			'description' => wfMsg( 'semanticformsinputs-timepicker-enableinputfield' ),
+			'description' => wfMessage( 'semanticformsinputs-timepicker-enableinputfield' )->text(),
 		);
 		$params[$sfigSettings->timePickerShowResetButton?'hide reset button':'show reset button'] = array(
 			'name' => $sfigSettings->timePickerShowResetButton?'hide reset button':'show reset button',
 			'type' => 'boolean',
-			'description' => wfMsg( 'semanticformsinputs-timepicker-showresetbutton' ),
+			'description' => wfMessage( 'semanticformsinputs-timepicker-showresetbutton' )->text(),
 		);
 
 		return $params;
-	}	
+	}
 
 	/**
 	 * Returns the names of the resource modules this input type uses.
-	 * 
-	 * Returns the names of the modules as an array or - if there is only one 
+	 *
+	 * Returns the names of the modules as an array or - if there is only one
 	 * module - as a string.
-	 * 
+	 *
 	 * @return null|string|array
 	 */
 	public function getResourceModuleNames() {

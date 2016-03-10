@@ -15,15 +15,17 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 	exit;
 }
 
-DATABASE_NAME = "";
-DATABASE_USER = "";
-DATABASE_PASSWORD = "";
+if (strstr($_SERVER['SERVER_NAME'], 'dev')) {
+    require_once("$IP/config/dev.php");
+} else {
+    require_once("$IP/config/prod.php");
+}
 
 
 ## Uncomment this to disable output compression
 # $wgDisableOutputCompression = true;
 
-$wgSitename = "Nodos";
+$wgSitename = $config['siteName'];
 
 ## The URL base path to the directory containing the wiki;
 ## defaults for all runtime URL paths are based off of this.
@@ -33,7 +35,7 @@ $wgSitename = "Nodos";
 $wgScriptPath = "";
 
 ## The protocol and server name to use in fully-qualified URLs
-$wgServer = "http://plataformanodos.org";
+$wgServer = $config['siteUrl'];
 
 
 ## The URL path to static resources (images, scripts, etc.)
@@ -58,9 +60,9 @@ $wgEmailAuthentication = true;
 ## Database settings
 $wgDBtype = "mysql";
 $wgDBserver = "localhost";
-$wgDBname = DATABASE_NAME;
-$wgDBuser = DATABASE_USER;
-$wgDBpassword = DATABASE_PASSWORD;
+$wgDBname = $config['dbName'];
+$wgDBuser = $config['dbUser'];
+$wgDBpassword = $config['dbPass'];
 
 # MySQL specific settings
 $wgDBprefix = "";
@@ -77,7 +79,7 @@ $wgMemCachedServers = array();
 
 ## To enable image uploads, make sure the 'images' directory
 ## is writable, then set this to true:
-$wgEnableUploads = false;
+$wgEnableUploads = true;
 #$wgUseImageMagick = true;
 #$wgImageMagickConvertCommand = "/usr/bin/convert";
 
@@ -122,7 +124,7 @@ $wgDiff3 = "/usr/bin/diff3";
 
 ## Default skin: you can change the default skin. Use the internal symbolic
 ## names, ie 'vector', 'monobook':
-$wgDefaultSkin = "vector";
+$wgDefaultSkin = "Vector";
 
 # Enabled skins.
 # The following skins were automatically enabled:
@@ -142,3 +144,41 @@ require_once "$IP/extensions/SemanticForms/SemanticForms.php";
 require_once("$IP/extensions/SemanticFormsInputs/SemanticFormsInputs.php");
 require_once("$IP/extensions/SemanticExtraSpecialProperties/SemanticExtraSpecialProperties.php");
 require_once("$IP/extensions/SemanticInternalObjects/SemanticInternalObjects.php");	
+
+wfLoadExtension( 'ParserFunctions' );
+
+
+// s3 filesystem repo
+$wgUploadDirectory = 'images';
+$wgUploadS3Bucket = $config['s3bucket'];
+$wgUploadS3SSL = false; // true if SSL should be used
+$wgPublicS3 = true; // true if public, false if authentication should be used
+
+$wgS3BaseUrl = "http".($wgUploadS3SSL?"s":"")."://s3.amazonaws.com/$wgUploadS3Bucket";
+
+//viewing needs a different url from uploading. Uploading doesnt work on the below url and viewing doesnt work on the above one.
+$wgS3BaseUrlView = "http".($wgUploadS3SSL?"s":"")."://".$wgUploadS3Bucket.".s3.amazonaws.com";
+$wgUploadBaseUrl = "$wgS3BaseUrlView/$wgUploadDirectory";
+
+// leave $wgCloudFrontUrl blank to not render images from CloudFront
+$wgCloudFrontUrl = '';//"http".($wgUploadS3SSL?"s":"").'://YOUR_CLOUDFRONT_SUBDOMAIN.cloudfront.net/';
+$wgLocalFileRepo = array(
+    'class' => 'LocalS3Repo',
+    'name' => 's3',
+    'directory' => $wgUploadDirectory,
+    'url' => $wgUploadBaseUrl ? $wgUploadBaseUrl . $wgUploadPath : $wgUploadPath,
+    'urlbase' => $wgS3BaseUrl ? $wgS3BaseUrl : "",
+    'hashLevels' => $wgHashedUploadDirectory ? 2 : 0,
+    'thumbScriptUrl' => $wgThumbnailScriptPath,
+    'transformVia404' => !$wgGenerateThumbnailOnParse,
+    'initialCapital' => $wgCapitalLinks,
+    'deletedDir' => $wgUploadDirectory.'/deleted',
+    'deletedHashLevels' => $wgFileStore['deleted']['hash'],
+    'AWS_ACCESS_KEY' => $config['s3AccessKey'],
+    'AWS_SECRET_KEY' => $config['s3SecretKey'],
+    'AWS_S3_BUCKET' => $wgUploadS3Bucket,
+    'AWS_S3_PUBLIC' => $wgPublicS3,
+    'AWS_S3_SSL' => $wgUploadS3SSL,
+    'cloudFrontUrl' => $wgCloudFrontUrl,
+);
+require_once("$IP/extensions/LocalS3Repo/LocalS3Repo.php");

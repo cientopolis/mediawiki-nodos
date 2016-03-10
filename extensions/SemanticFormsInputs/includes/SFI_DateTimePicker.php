@@ -2,7 +2,7 @@
 
 /**
  * File holding the SFI_DateTimePicker class
- * 
+ *
  * @author Stephan Gambke
  * @file
  * @ingroup SemanticFormsInputs
@@ -21,7 +21,7 @@ class SFIDateTimePicker extends SFFormInput {
 	protected $mDatePicker;
 	protected $mTimePicker;
 
-		/**
+	/**
 	 * Constructor.
 	 *
 	 * @param String $input_number
@@ -37,11 +37,11 @@ class SFIDateTimePicker extends SFFormInput {
 	 *		input definition.
 	 */
 	public function __construct( $input_number, $cur_value, $input_name, $disabled, $other_args ) {
-		
+
 		parent::__construct( $input_number, $cur_value, $input_name, $disabled, $other_args );
-		
+
 		// prepare sub-inputs
-		
+
 		$this->mOtherArgs["part of dtp"] = true;
 
 		// find allowed values and keep only the date portion
@@ -75,12 +75,12 @@ class SFIDateTimePicker extends SFFormInput {
 			$dateString = $dateTimeString;
 		}
 
-		$this->mDatePicker = new SFIDatePicker( $this->mInputNumber . '_dp', $dateString, $this->mInputName, $this->mIsDisabled, $this->mOtherArgs );
+		$this->mDatePicker = new SFDatePickerInput( $this->mInputNumber . '_dp', $dateString, $this->mInputName, $this->mIsDisabled, $this->mOtherArgs );
 		$this->mTimePicker = new SFITimePicker( $this->mInputNumber . '_tp', $timeString, $this->mInputName, $this->mIsDisabled, $this->mOtherArgs );
-		
+
 		// add JS data
 		$this->addJsInitFunctionData( 'SFI_DTP_init', $this->setupJsInitAttribs() );
-		
+
 	}
 
 	/**
@@ -96,7 +96,7 @@ class SFIDateTimePicker extends SFFormInput {
 	}
 
 	protected function setupJsInitAttribs() {
-		
+
 		global $sfigSettings;
 
 		$jsattribs = array();
@@ -122,20 +122,20 @@ class SFIDateTimePicker extends SFFormInput {
 				$jsattribs['userClasses'] = '';
 			}
 		}
-		
-		$jsattribs['subinputs'] = 
+
+		$jsattribs['subinputs'] =
 				$this->mDatePicker->getHtmlText() . " " .
 				$this->mTimePicker->getHtmlText();
-		
+
 		$jsattribs['subinputsInitData'] = array(
 			'input_' . $this->mInputNumber . '_dp' => $this->mDatePicker->getJsInitFunctionData(),
 			'input_' . $this->mInputNumber . '_tp' => $this->mTimePicker->getJsInitFunctionData()
 		);
 
 		// build JS code from attributes array
-		return Xml::encodeJsVar( $jsattribs );
+		return $jsattribs;
 	}
-	
+
 	/**
 	 * Returns the HTML code to be included in the output page for this input.
 	 *
@@ -146,12 +146,12 @@ class SFIDateTimePicker extends SFFormInput {
 	 */
 	public function getHtmlText(){
 
-		global $sfigSettings;
+		global $sfgDatePickerSettings;
 
 		// should the input field be disabled?
 		$inputFieldDisabled =
 			array_key_exists( 'disable input field', $this->mOtherArgs )
-			|| ( !array_key_exists( 'enable input field', $this->mOtherArgs ) && $sfigSettings->datePickerDisableInputField )
+			|| ( !array_key_exists( 'enable input field', $this->mOtherArgs ) && $sfgDatePickerSettings['DisableInputField'] )
 			|| $this->mIsDisabled	;
 
 		$html = '<span class="inputSpan' . ( array_key_exists( 'mandatory', $this->mOtherArgs) ? ' mandatoryFieldSpan' : '') . '">' .
@@ -176,7 +176,7 @@ class SFIDateTimePicker extends SFFormInput {
 	public static function getParameters() {
 		return array_merge(
 			parent::getParameters(),
-			SFIDatePicker::getParameters(),
+			SFDatePickerInput::getParameters(),
 			SFITimePicker::getParameters()
 		);
 	}
@@ -196,14 +196,14 @@ class SFIDateTimePicker extends SFFormInput {
 
 	/**
 	 * Returns the names of the resource modules this input type uses.
-	 * 
-	 * Returns the names of the modules as an array or - if there is only one 
+	 *
+	 * Returns the names of the modules as an array or - if there is only one
 	 * module - as a string.
-	 * 
+	 *
 	 * @return null|string|array
 	 */
 	public function getResourceModuleNames() {
-		return 'ext.semanticformsinputs.datetimepicker';
+		return array( 'ext.semanticforms.datepicker', 'ext.semanticformsinputs.timepicker', 'ext.semanticformsinputs.datetimepicker' );
 	}
 
 }

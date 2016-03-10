@@ -35,21 +35,7 @@ class SFIDateCheck extends SFFormInput {
 		} else {
 			$this->mIsMandatory = 'true';
 		}
-		$this->addJsInitFunctionData( 'SFI_DateCheck_init', $this->setupJsInitAttribs() );
-	}
-
-	/**
-	 * Prepares attributes for javascript that will be run.
-	 *
-	 * <b>It's a stub now</b>
-	 *
-	 * @return string attributes for javascript file
-	 */
-	private function setupJsInitAttribs() {
-
-		$jsattribs = array();
-
-		return json_encode( $jsattribs );
+		$this->addJsInitFunctionData( 'SFI_DateCheck_init' );
 	}
 
 	public static function getName() {

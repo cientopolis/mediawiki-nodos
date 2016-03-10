@@ -27,6 +27,7 @@
 .SFI_menuselect ul ul { /* sub-item lists only */
 	margin-left: 3px;
 	margin-right: 3px;
+	list-style: none none outside;
 }
 
 
@@ -44,7 +45,7 @@
 	display: inline;
 }
 
-.SFI_menuselect .cont { 
+.SFI_menuselect .cont {
 	padding:0px 2px;
 	width: 100%;
 	vertical-align: baseline;

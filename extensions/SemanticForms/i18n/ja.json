@@ -9,10 +9,11 @@
 			"Whym",
 			"青子守歌",
 			"Rxy",
-			"Sujiniku"
+			"Sujiniku",
+			"Otokoume"
 		]
 	},
-	"semanticforms-desc": "意味的データを追加/編集するフォーム",
+	"semanticforms-desc": "ウィキのページを作成および編集するフォーム",
 	"specialpages-group-sf_group": "意味的フォーム",
 	"createproperty": "プロパティの作成",
 	"sf-createproperty-with-name": "プロパティの作成: $1",
@@ -158,6 +159,8 @@
 	"sf_runquery_title": "クエリの実行: $1",
 	"sf_runquery_additionalquery": "追加のクエリ",
 	"sf_formerrors_header": "フォームへの入力内容に誤りがありました。以下をご覧ください",
+	"sf_too_few_instances_error": "少なくとも $1 {{PLURAL:$1|インスタンス}} が、このテンプレート上に必要です。",
+	"sf_too_many_instances_error": "$1 {{PLURAL:$1|インスタンス}} 以上が、このテンプレート上にあってはいけません。",
 	"sf_blank_error": "空欄にはできません",
 	"sf_bad_url_error": "URL を「http」から始まる正しい形式にする必要があります",
 	"sf_bad_email_error": "メールアドレスを正しい形式にする必要があります",
@@ -190,5 +193,14 @@
 	"sf-select2-searching": "検索中...",
 	"sf-select2-input-too-short": "$1 文字以上入力してください。",
 	"sf-maps-setmarker": "マーカーを設定",
-	"sf-maps-lookupcoordinates": "座標を検索"
+	"sf-maps-lookupcoordinates": "座標を検索",
+	"sf-datepicker-close": "閉じる",
+	"sf-datepicker-prev": "前へ",
+	"sf-datepicker-next": "次へ",
+	"sf-datepicker-today": "今日",
+	"sf-datepicker-dateformatlong": "yy年mm月dd日",
+	"sf-datepicker-dateformatshort": "yy/mm/dd",
+	"sf-datepicker-dateformat": "日付の書式の文字列です。詳細情報は[https://www.mediawiki.org/w/index.php?title=Extension:Semantic_Forms_Inputs&fromsection=Date_picker#Parameters オンライン説明文書]を参照してください。",
+	"sf-datepicker-weekstart": "週の初日の曜日 (0: 日曜日、1: 月曜日、...)",
+	"sf-regexp-wrongformat": "間違った形式です。"
 }

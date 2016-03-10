@@ -1,6 +1,8 @@
 {
+	"@Note": "When updating this file please also update SemanticForms.php with the same changes.",
+	"load_composer_autoloader": true,
 	"name": "Semantic Forms",
-	"version": "3.4",
+	"version": "3.5",
 	"author": [
 		"Yaron Koren",
 		"Stephan Gambke",
@@ -10,17 +12,37 @@
 	"descriptionmsg": "semanticforms-desc",
 	"type": "specialpage",
 	"callback": "SFUtils::registerExtension",
+	"ExtensionFunctions": [
+		"SFUtils::initialize"
+	],
+	"require": {
+		"MediaWiki": ">= 1.27.0"
+	},
+	"GroupPermissions": {
+		"*": {
+			"viewedittab": true
+		},
+		"sysop": {
+			"editrestrictedfields": true
+		},
+		"user": {
+			"createclass": true
+		}
+	},
 	"AvailableRights": [
 		"viewedittab",
 		"editrestrictedfields",
 		"createclass"
 	],
+	"Actions": {
+		"formedit": "SFFormEditAction",
+		"formcreate": "SFHelperFormAction"
+	},
 	"SpecialPages": {
 		"Forms": "SFForms",
 		"CreateForm": "SFCreateForm",
 		"Templates": "SFTemplates",
 		"CreateTemplate": "SFCreateTemplate",
-		"CreateProperty": "SFCreateProperty",
 		"CreateClass": "SFCreateClass",
 		"CreateCategory": "SFCreateCategory",
 		"FormStart": "SFFormStart",
@@ -41,7 +63,9 @@
 		]
 	},
 	"ExtensionMessagesFiles": {
-		"SemanticFormsMagic": "languages/SF_Magic.php"
+		"SemanticFormsAlias": "languages/SF_Aliases.php",
+		"SemanticFormsMagic": "languages/SF_Magic.php",
+		"SemanticFormsNS": "languages/SF_Namespaces.php"
 	},
 	"AutoloadClasses": {
 		"SFForms": "specials/SF_Forms.php",
@@ -88,6 +112,7 @@
 		"SFListBoxInput": "includes/forminputs/SF_ListBoxInput.php",
 		"SFComboBoxInput": "includes/forminputs/SF_ComboBoxInput.php",
 		"SFDateInput": "includes/forminputs/SF_DateInput.php",
+		"SFDatePickerInput": "includes/forminputs/SF_DatePickerInput.php",
 		"SFDateTimeInput": "includes/forminputs/SF_DateTimeInput.php",
 		"SFYearInput": "includes/forminputs/SF_YearInput.php",
 		"SFTreeInput": "includes/forminputs/SF_TreeInput.php",
@@ -97,7 +122,14 @@
 		"SFTokensInput": "includes/forminputs/SF_TokensInput.php",
 		"SFGoogleMapsInput": "includes/forminputs/SF_GoogleMapsInput.php",
 		"SFOpenLayersInput": "includes/forminputs/SF_OpenLayersInput.php",
-		"SFCreatePageJob": "includes/SF_CreatePageJob.php"
+		"SFRegExpInput": "includes/forminputs/SF_RegExpInput.php",
+		"SFWikiPage": "includes/wikipage/SF_WikiPage.php",
+		"SFWikiPageTemplate": "includes/wikipage/SF_WikiPageTemplate.php",
+		"SFWikiPageTemplateParam": "includes/wikipage/SF_WikiPageTemplateParam.php",
+		"SFWikiPageSection": "includes/wikipage/SF_WikiPageSection.php",
+		"SFWikiPageFreeText": "includes/wikipage/SF_WikiPageFreeText.php",
+		"SFCreatePageJob": "includes/SF_CreatePageJob.php",
+		"SF_Language": "languages/SF_Language.php"
 	},
 	"ResourceModules": {
 		"ext.semanticforms.main": {
@@ -128,7 +160,9 @@
 				"sf_not_unique_error",
 				"sf_bad_url_error",
 				"sf_bad_email_error",
-				"sf_bad_number_error"
+				"sf_bad_number_error",
+				"sf_bad_date_error",
+				"sf_pipe_error"
 			]
 		},
 		"ext.semanticforms.browser": {
@@ -149,7 +183,7 @@
 			],
 			"scripts": [
 				"libs/jquery.dynatree.js",
-				"libs/ext.dynatree.js"
+				"libs/SF_dynatree.js"
 			],
 			"styles": "skins/ui.dynatree.css"
 		},
@@ -210,6 +244,21 @@
 				"sf_forminputs_checkboxes_select_none"
 			]
 		},
+		"ext.semanticforms.datepicker": {
+			"scripts": [
+				"libs/SF_datepicker.js"
+			],
+			"dependencies": [
+				"jquery.ui.datepicker",
+				"ext.semanticforms.main"
+			]
+		},
+		"ext.semanticforms.regexp": {
+			"scripts": "libs/SF_regexp.js",
+			"dependencies": [
+				"ext.semanticforms.main"
+			]
+		},
 		"ext.semanticforms.select2": {
 			"scripts": [
 				"libs/select2.js",
@@ -233,14 +282,40 @@
 				"sf-select2-selection-too-big"
 			]
 		},
-		"ext.semanticforms.maps": {
-			"scripts": [
-				"libs/SF_maps.js"
-			]
-		},
 		"ext.semanticforms": {
 			"scripts": [
 				"libs/ext.sf.js"
+			]
+		},
+		"ext.semanticforms.SF_CreateProperty": {
+			"scripts": [
+				"libs/SF_CreateProperty.js"
+			]
+		},
+		"ext.semanticforms.SF_PageSchemas": {
+			"scripts": [
+				"libs/SF_PageSchemas.js"
+			]
+		},
+		"ext.semanticforms.SF_CreateTemplate": {
+			"scripts": [
+				"libs/SF_CreateTemplate.js"
+			],
+			"messages": [
+				"sf_blank_error"
+			]
+		},
+		"ext.semanticforms.SF_CreateClass": {
+			"scripts": [
+				"libs/SF_CreateClass.js"
+			]
+		},
+		"ext.semanticforms.SF_CreateForm": {
+			"scripts": [
+				"libs/SF_CreateForm.js"
+			],
+			"messages": [
+				"sf_blank_error"
 			]
 		}
 	},
@@ -266,9 +341,6 @@
 		"ArticlePurge": [
 			"SFFormUtils::purgeCache"
 		],
-		"ArticleSave": [
-			"SFFormUtils::purgeCache"
-		],
 		"ParserFirstCallInit": [
 			"SFParserFunctions::registerFunctions"
 		],
@@ -289,16 +361,10 @@
 		],
 		"ResourceLoaderRegisterModules": [
 			"SFUtils::registerModules"
-		],
-		"AdminLinks": [
-			"SFUtils::addToAdminLinks"
 		]
 	},
-	"Actions": {
-		"formedit": "SFFormEditAction",
-		"formcreate": "SFHelperFormAction"
-	},
 	"config": {
+		"_prefix": "",
 		"sfgMaxAutocompleteValues": 1000,
 		"sfgMaxLocalAutocompleteValues": 100,
 		"sfgAutocompleteOnAllChars": false,
@@ -319,7 +385,22 @@
 		"sfgFieldProperties": [],
 		"sfgCargoFields": [],
 		"sfgDependentFields": [],
-		"sfgCheckboxesSelectAllMinimum": 10
+		"sfgCheckboxesSelectAllMinimum": 10,
+
+		"sfgDatePickerSettings": {
+			"@note": "See SF_DefaultInputSettings.php for allowed values",
+			"FirstDate": null,
+			"LastDate": null,
+			"DateFormat": "SHORT",
+			"WeekStart": null,
+			"ShowWeekNumbers": false,
+			"DisableInputField": false,
+			"ShowResetButton": false,
+			"DisabledDaysOfWeek": null,
+			"HighlightedDaysOfWeek": null,
+			"DisabledDates": null,
+			"HighlightedDates": null
+		}
 	},
 	"manifest_version": 1
 }

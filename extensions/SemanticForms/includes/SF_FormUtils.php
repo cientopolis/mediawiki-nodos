@@ -37,37 +37,17 @@ class SFFormUtils {
 	 * Add a hidden input for each field in the template call that's
 	 * not handled by the form itself
 	 */
-	static function unhandledFieldsHTML( $templateName, $templateContents ) {
+	static function unhandledFieldsHTML( $template_in_form ) {
 		// HTML element names shouldn't contain spaces
-		$templateName = str_replace( ' ', '_', $templateName );
+		$templateName = str_replace( ' ', '_', $template_in_form->getTemplateName() );
 		$text = "";
-		foreach ( $templateContents as $key => $value ) {
+		foreach ( $template_in_form->getValuesFromPage() as $key => $value ) {
 			if ( !is_null( $key ) && !is_numeric( $key ) ) {
 				$key = urlencode( $key );
 				$text .= Html::hidden( '_unhandled_' . $templateName . '_' . $key, $value );
 			}
 		}
 		return $text;
-	}
-
-	/**
-	 * Add unhandled fields back into the template call that the form
-	 * generates, so that editing with a form will have no effect on them
-	 */
-	static function addUnhandledFields( $templateName ) {
-		global $wgRequest;
-
-		$templateName = str_replace( ' ', '_', $templateName );
-		$prefix = '_unhandled_' . $templateName . '_';
-		$prefixSize = strlen( $prefix );
-		$additional_template_text = "";
-		foreach ( $wgRequest->getValues() as $key => $value ) {
-			if ( strpos( $key, $prefix ) === 0 ) {
-				$field_name = urldecode( substr( $key, $prefixSize ) );
-				$additional_template_text .= "|$field_name=$value\n";
-			}
-		}
-		return $additional_template_text;
 	}
 
 	static function summaryInputHTML( $is_disabled, $label = null, $attr = array(), $value = '' ) {
@@ -138,7 +118,7 @@ class SFFormUtils {
 			} elseif ( $wgUser->getOption( 'watchcreations' ) && !$wgTitle->exists() ) {
 				# Watch creations
 				$is_checked = true;
-			} elseif ( $wgTitle->userIsWatching() ) {
+			} elseif ( $wgUser->isWatched( $wgTitle ) ) {
 				# Already watched
 				$is_checked = true;
 			}

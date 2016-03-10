@@ -224,7 +224,7 @@ class SFFormLinker {
 		// Allow outside code to set/change the preloaded text.
 		Hooks::run( 'sfEditFormPreloadText', array( &$preloadContent, $title, $formTitle ) );
 
-		list ( $formText, $javascriptText, $dataText, $formPageTitle, $generatedPageName ) =
+		list ( $formText, $javascriptText, $pageText, $formPageTitle, $generatedPageName ) =
 			$sfgFormPrinter->formHTML( $formDefinition, false, false, null, $preloadContent, 'Some very long page name that will hopefully never get created ABCDEF123', null );
 		$params = array();
 
@@ -239,7 +239,7 @@ class SFFormLinker {
 			}
 		}
 		$params['user_id'] = $userID;
-		$params['page_text'] = $dataText;
+		$params['page_text'] = $pageText;
 		$job = new SFCreatePageJob( $title, $params );
 
 		$jobs = array( $job );
@@ -323,7 +323,7 @@ class SFFormLinker {
 	 */
 	static function setBrokenLink( $linker, $target, $options, $text, &$attribs, &$ret ) {
 		// If it's not a broken (red) link, exit.
-		if ( !in_array( 'broken', $options ) ) {
+		if ( !in_array( 'broken', $options, true ) ) {
 			return true;
 		}
 		// If the link is to a special page, exit.

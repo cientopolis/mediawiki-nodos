@@ -9,10 +9,13 @@
 
 class SFUtils {
 
-
 	public static function registerExtension() {
-		global $wgScriptPath, $sfgScriptPath, $sfgIP;
-		global $sfgFormPrinter, $wgEditPageFrameOptions, $wgGroupPermissions, $smwgEnabledSpecialPage;
+		if ( defined( 'SF_VERSION' ) ) {
+			// Do not load Semantic Forms more than once.
+			return 1;
+		}
+
+		define( 'SF_VERSION', '3.5' );
 
 		if ( !defined( 'SMW_VERSION' ) ) {
 			// SMW defines these namespaces itself.
@@ -20,9 +23,7 @@ class SFUtils {
 			define( 'SF_NS_FORM_TALK', 107 );
 		}
 
-		$sfgPartialPath = '/extensions/SemanticForms';
-		$sfgScriptPath = $wgScriptPath . $sfgPartialPath;
-		$sfgIP = dirname( __FILE__ );
+		$GLOBALS['sfgIP'] = dirname( __DIR__ );
 
 		// Constants for special properties
 		define( 'SF_SP_HAS_DEFAULT_FORM', 1 );
@@ -35,26 +36,59 @@ class SFUtils {
 		 * This is a delayed init that makes sure that MediaWiki is set
 		 * up properly before we add our stuff.
 		 */
+
+		// This global variable is needed so that other
+		// extensions can hook into it to add their own
+		// input types.
+
 		if ( defined( 'SMW_VERSION' ) ) {
-			$wgExtensionFunctions[] = function() {
-				// This global variable is needed so that other
-				// extensions can hook into it to add their own
-				// input types.
-				$sfgFormPrinter = new StubObject( 'sfgFormPrinter', 'SFFormPrinter' );
-			};
-		} else {
-			$sfgFormPrinter = new StubObject( 'sfgFormPrinter', 'SFFormPrinter' );
+			$GLOBALS['wgSpecialPages']['CreateProperty'] = 'SFCreateProperty';
+			$GLOBALS['wgAutoloadClasses']['SFCreateProperty'] = __DIR__ . '/../specials/SF_CreateProperty.php';
 		}
 
-		// Allow for popup windows for file upload
-		$wgEditPageFrameOptions = 'SAMEORIGIN';
+		/**
+		 * Initialize a global language object for content language. This
+		 * must happen early on, even before user language is known, to
+		 * determine labels for additional namespaces. In contrast, messages
+		 * can be initialised much later, when they are actually needed.
+		 */
+		if ( !empty( $GLOBALS['sfgContLang'] ) ) {
+			return;
+		}
 
-		$wgGroupPermissions['*']['viewedittab'] = true;
-		$wgGroupPermissions['sysop']['editrestrictedfields'] = true;
-		$wgGroupPermissions['user']['createclass'] = true;
+		$cont_lang_class = 'SF_Language' . str_replace( '-', '_', ucfirst( $GLOBALS['wgLanguageCode'] ) );
+		if ( file_exists( __DIR__ . '/../languages/' . $cont_lang_class . '.php' ) ) {
+			include_once( __DIR__ . '/../languages/' . $cont_lang_class . '.php' );
+		}
+
+		// fallback if language not supported
+		if ( !class_exists( $cont_lang_class ) ) {
+			include_once( __DIR__ . '/../languages/SF_LanguageEn.php' );
+			$cont_lang_class = 'SF_LanguageEn';
+		}
+
+		$GLOBALS['sfgContLang'] = new $cont_lang_class();
+
+		// Allow for popup windows for file upload
+		$GLOBALS['wgEditPageFrameOptions'] = 'SAMEORIGIN';
 
 		// Necessary setting for SMW 1.9+
-		$smwgEnabledSpecialPage[] = 'RunQuery';
+		$GLOBALS['smwgEnabledSpecialPage'][] = 'RunQuery';
+	}
+
+	public static function initialize() {
+		$GLOBALS['sfgPartialPath'] = '/extensions/SemanticForms';
+		$GLOBALS['sfgScriptPath'] = $GLOBALS['wgScriptPath'] . $GLOBALS['sfgPartialPath'];
+
+		// Admin Links hook needs to be called in a delayed way so that it
+		// will always be called after SMW's Admin Links addition; as of
+		// SMW 1.9, SMW delays calling all its hook functions.
+		$GLOBALS['wgHooks']['AdminLinks'][] = 'SFUtils::addToAdminLinks';
+
+		// This global variable is needed so that other
+		// extensions can hook into it to add their own
+		// input types.
+		$GLOBALS['sfgFormPrinter'] = new StubObject( 'sfgFormPrinter', 'SFFormPrinter' );
 	}
 
 	/**
@@ -331,33 +365,12 @@ END;
 	}
 
 	/**
-	 * Javascript files to be added outside of the ResourceLoader -
-	 * by default, there are none.
-	 */
-	public static function addJavascriptFiles( $parser ) {
-		global $wgOut, $wgJsMimeType;
-
-		$scripts = array();
-
-		Hooks::run( 'sfAddJavascriptFiles', array( &$scripts ) );
-
-		foreach ( $scripts as $js ) {
-			if ( $parser ) {
-				$script = "<script type=\"$wgJsMimeType\" src=\"$js\"></script>\n";
-				$parser->getOutput()->addHeadItem( $script );
-			} else {
-				$wgOut->addScriptFile( $js );
-			}
-		}
-	}
-
-	/**
-	 * Includes the necessary Javascript and CSS files for the form
+	 * Includes the necessary ResourceLoader modules for the form
 	 * to display and work correctly.
 	 *
 	 * Accepts an optional Parser instance, or uses $wgOut if omitted.
 	 */
-	public static function addJavascriptAndCSS( $parser = null ) {
+	public static function addFormRLModules( $parser = null ) {
 		global $wgOut;
 
 		// Handling depends on whether or not this form is embedded
@@ -369,18 +382,26 @@ END;
 			$output = $parser->getOutput();
 		}
 
-		$output->addModules( 'ext.semanticforms.main' );
-		$output->addModules( 'ext.semanticforms.fancybox' );
-		$output->addModules( 'ext.semanticforms.dynatree' );
-		$output->addModules( 'ext.semanticforms.imagepreview' );
-		$output->addModules( 'ext.semanticforms.autogrow' );
-		$output->addModules( 'ext.semanticforms.submit' );
-		$output->addModules( 'ext.semanticforms.checkboxes' );
-		$output->addModules( 'ext.semanticforms.select2' );
-		$output->addModules( 'ext.smw.tooltips' );
-		$output->addModules( 'ext.smw.sorttable' );
+		$mainModules = array(
+			'ext.semanticforms.main',
+			'ext.semanticforms.fancybox',
+			'ext.semanticforms.dynatree',
+			'ext.semanticforms.imagepreview',
+			'ext.semanticforms.autogrow',
+			'ext.semanticforms.submit',
+			'ext.semanticforms.checkboxes',
+			'ext.semanticforms.select2',
+			'ext.smw.tooltips',
+			'ext.smw.sorttable'
+		);
 
-		self::addJavascriptFiles( $parser );
+		$output->addModules( $mainModules );
+
+		$otherModules = array();
+		Hooks::run( 'sfAddResourceLoaderModules', array( &$otherModules ) );
+		foreach ( $otherModules as $rlModule ) {
+			$output->addModules( $rlModule );
+		}
 	}
 
 	/**
@@ -448,8 +469,19 @@ END;
 	 * Used with the Cargo extension
 	 */
 	public static function getValuesForCargoField( $tableName, $fieldName, $whereStr = null ) {
-		$limitStr = 200;
-		$sqlQuery = CargoSQLQuery::newFromValues( $tableName, $fieldName, $whereStr, $joinOnStr = null, $fieldName, $havingStr = null, $fieldName, $limitStr );
+		global $sfgMaxLocalAutocompleteValues;
+
+		// The limit should be greater than the maximum number of local
+		// autocomplete values, so that form inputs also know whether
+		// to switch to remote autocompletion.
+		$limitStr = max( 100, $sfgMaxLocalAutocompleteValues + 1);
+
+		try {
+			$sqlQuery = CargoSQLQuery::newFromValues( $tableName, $fieldName, $whereStr, $joinOnStr = null, $fieldName, $havingStr = null, $fieldName, $limitStr );
+		} catch ( Exception $e ) {
+			return array();
+		}
+
 		$queryResults = $sqlQuery->run();
 		$values = array();
 		// Field names starting with a '_' are special fields -
@@ -706,8 +738,8 @@ END;
 		$templateExists = $title->exists();
 		foreach ( $values as $value ) {
 			if ( $templateExists ) {
-				$label = $wgParser->recursiveTagParse( '{{' . $templateName .
-					'|' . $value . '}}' );
+				$label = trim( $wgParser->recursiveTagParse( '{{' . $templateName .
+					'|' . $value . '}}' ) );
 				if ( $label == '' ) {
 					$labels[$value] = $value;
 				} else {
@@ -725,6 +757,11 @@ END;
 	 * given a mapping property.
 	 */
 	public static function getLabelsFromProperty( $values, $propertyName ) {
+		// Error-handling.
+		if ( !is_array( $values ) ) {
+			return array();
+		}
+
 		$labels = array();
 		foreach ( $values as $value ) {
 			$labels[$value] = $value;
@@ -734,7 +771,7 @@ END;
 				if ( $subject != null ) {
 					$vals = self::getSMWPropertyValues( $store, $subject, $propertyName );
 					if ( count( $vals ) > 0 ) {
-						$labels[$value] = $vals[0];
+						$labels[$value] = trim( $vals[0] );
 					}
 				}
 			}
@@ -752,7 +789,7 @@ END;
 			$labels[$value] = $value;
 			$vals = self::getValuesForCargoField( $tableName, $fieldName, '_pageName="' . $value . '"' );
 			if ( count( $vals ) > 0 ) {
-				$labels[$value] = $vals[0];
+				$labels[$value] = trim( $vals[0] );
 			}
 		}
 		return SFUtils::disambiguateLabels( $labels );
@@ -1097,7 +1134,7 @@ END;
 			$wgOut->addParserOutputNoText( $parserOutput );
 		}
 
-		SFUtils::addJavascriptAndCSS();
+		SFUtils::addFormRLModules();
 		$editpage->previewTextAfterContent .=
 			'<div style="margin-top: 15px">' . $form_text . "</div>";
 
@@ -1319,18 +1356,25 @@ END;
 		if ( class_exists( 'WikiEditorHooks' ) ) {
 			$resourceLoader->register( array(
 				'ext.semanticforms.wikieditor' => array(
-					'localBasePath' => __DIR__ . '/..',
+					'localBasePath' => __DIR__,
 					'remoteExtPath' => 'SemanticForms',
-					'scripts' => 'libs/SF_wikieditor.js',
-					'styles' => 'skins/SF_wikieditor.css',
+					'scripts' => '/../libs/SF_wikieditor.js',
+					'styles' => '/../skins/SF_wikieditor.css',
 					'dependencies' => array(
 						'ext.semanticforms.main',
-						'jquery.wikiEditor',
-					),
-					'position' => 'top'
+						'jquery.wikiEditor'
+					)
 				),
 			) );
 		}
+
+		$resourceLoader->register( array(
+			'ext.semanticforms.maps' => array(
+				'localBasePath' => __DIR__,
+				'remoteExtPath' => 'SemanticForms',
+				'scripts' => '/../libs/SF_maps.js',
+			),
+		) );
 
 		return true;
 	}
@@ -1401,10 +1445,9 @@ END;
 	 *
 	 * @return boolean
 	 */
-	 public static function onUnitTestsList( &$files ) {
+	public static function onUnitTestsList( &$files ) {
 		$testDir = dirname( __DIR__ ) . '/tests/phpunit/includes';
 		$files = array_merge( $files, glob( "$testDir/*Test.php" ) );
 		return true;
-	 }
-
+	}
 }
