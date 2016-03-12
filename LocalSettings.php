@@ -15,7 +15,7 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 	exit;
 }
 
-if (strstr($_SERVER['SERVER_NAME'], 'dev')) {
+if (strstr($_SERVER['SERVER_NAME'], 'dev') || strstr($_SERVER['SERVER_NAME'], 'localhost')) {
     require_once("$IP/config/dev.php");
 } else {
     require_once("$IP/config/prod.php");
