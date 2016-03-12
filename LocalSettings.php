@@ -15,7 +15,7 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 	exit;
 }
 
-if (strstr($_SERVER['SERVER_NAME'], 'dev')) {
+if (strstr($_SERVER['SERVER_NAME'], 'localhost')) {
     require_once("$IP/config/dev.php");
 } else {
     require_once("$IP/config/prod.php");
@@ -32,7 +32,7 @@ $wgSitename = $config['siteName'];
 ## For more information on customizing the URLs
 ## (like /w/index.php/Page_title to /wiki/Page_title) please see:
 ## https://www.mediawiki.org/wiki/Manual:Short_URL
-$wgScriptPath = "";
+$wgScriptPath = $config['ScriptPath'];
 
 ## The protocol and server name to use in fully-qualified URLs
 $wgServer = $config['siteUrl'];
@@ -63,6 +63,8 @@ $wgDBserver = "localhost";
 $wgDBname = $config['dbName'];
 $wgDBuser = $config['dbUser'];
 $wgDBpassword = $config['dbPass'];
+
+
 
 # MySQL specific settings
 $wgDBprefix = "";
@@ -173,7 +175,6 @@ $wgLocalFileRepo = array(
     'transformVia404' => !$wgGenerateThumbnailOnParse,
     'initialCapital' => $wgCapitalLinks,
     'deletedDir' => $wgUploadDirectory.'/deleted',
-    'deletedHashLevels' => $wgFileStore['deleted']['hash'],
     'AWS_ACCESS_KEY' => $config['s3AccessKey'],
     'AWS_SECRET_KEY' => $config['s3SecretKey'],
     'AWS_S3_BUCKET' => $wgUploadS3Bucket,
