@@ -173,7 +173,6 @@ $wgLocalFileRepo = array(
     'transformVia404' => !$wgGenerateThumbnailOnParse,
     'initialCapital' => $wgCapitalLinks,
     'deletedDir' => $wgUploadDirectory.'/deleted',
-    'deletedHashLevels' => $wgFileStore['deleted']['hash'],
     'AWS_ACCESS_KEY' => $config['s3AccessKey'],
     'AWS_SECRET_KEY' => $config['s3SecretKey'],
     'AWS_S3_BUCKET' => $wgUploadS3Bucket,
