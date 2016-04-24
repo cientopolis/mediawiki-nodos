@@ -187,3 +187,6 @@ $wgLocalFileRepo = array(
     'cloudFrontUrl' => $wgCloudFrontUrl,
 );
 require_once("$IP/extensions/LocalS3Repo/LocalS3Repo.php");
+
+$wgGroupPermissions['*']['viewedittab'] = false;
+$wgGroupPermissions['sysop']['viewedittab'] = true;
