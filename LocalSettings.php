@@ -122,12 +122,6 @@ $wgRightsIcon = "";
 # Path to the GNU diff3 utility. Used for conflict resolution.
 $wgDiff3 = "/usr/bin/diff3";
 
-# The following permissions were set based on your choice in the installer
-$wgGroupPermissions['*']['createaccount'] = false;
-$wgGroupPermissions['*']['edit'] = false;
-# Disable reading by anonymous users
-$wgGroupPermissions['*']['read'] = false;
-
 ## Default skin: you can change the default skin. Use the internal symbolic
 ## names, ie 'vector', 'monobook':
 $wgDefaultSkin = "Vector";
@@ -188,8 +182,16 @@ $wgLocalFileRepo = array(
 );
 require_once("$IP/extensions/LocalS3Repo/LocalS3Repo.php");
 
+$wgGroupPermissions['*']['createaccount'] = false;
 $wgGroupPermissions['*']['viewedittab'] = false;
+$wgGroupPermissions['*']['edit'] = false;
+$wgGroupPermissions['*']['read'] = false;
+$wgGroupPermissions['user']['viewedittab'] = false;
 $wgGroupPermissions['sysop']['viewedittab'] = true;
+
+
+//renames the "Edit with form" tab to "edit", and the "edit" tab to "edit source"
+$sfgRenameEditTabs = true;
 
 //Calendar global configuration
 $sfgDatePickerSettings['DateFormat'] = 'dd/mm/yy';
