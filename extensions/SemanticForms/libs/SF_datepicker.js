@@ -68,6 +68,7 @@ window.SF_DP_init = function ( input_id, params ) {
 			'buttonImageOnly': false,
 			'changeMonth': true,
 			'changeYear': true,
+			'yearRange': 'c-100:+0',
 			'altFormat': 'yy/mm/dd',
 			// Today button does not work (http://dev.jqueryui.com/ticket/4045)
 			// do not show button panel for now

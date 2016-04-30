@@ -194,5 +194,4 @@ $wgGroupPermissions['sysop']['viewedittab'] = true;
 //Calendar global configuration
 $sfgDatePickerSettings['DateFormat'] = 'dd/mm/yy';
 $sfgDatePickerSettings['WeekStart'] = '1';
-$sfgDatePickerSettings['FirstDate'] = '01/01/1900';
 $sfgDatePickerSettings['DisableInputField'] = false;
