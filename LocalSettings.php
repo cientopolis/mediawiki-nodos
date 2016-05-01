@@ -187,7 +187,10 @@ $wgGroupPermissions['*']['viewedittab'] = false;
 $wgGroupPermissions['*']['edit'] = false;
 $wgGroupPermissions['*']['read'] = false;
 $wgGroupPermissions['user']['viewedittab'] = false;
+$wgGroupPermissions['user']['createpage'] = false;
 $wgGroupPermissions['sysop']['viewedittab'] = true;
+
+$wgNamespaceProtection[NS_SPECIAL] = array('editinterface');
 
 
 //renames the "Edit with form" tab to "edit", and the "edit" tab to "edit source"
@@ -197,3 +200,5 @@ $sfgRenameEditTabs = true;
 $sfgDatePickerSettings['DateFormat'] = 'dd/mm/yy';
 $sfgDatePickerSettings['WeekStart'] = '1';
 $sfgDatePickerSettings['DisableInputField'] = false;
+
+
