@@ -426,7 +426,10 @@ return array(
 	'jquery.ui.datepicker' => array(
 		'position' => 'bottom',
 		'scripts' => 'resources/lib/jquery.ui/jquery.ui.datepicker.js',
-		'dependencies' => 'jquery.ui.core',
+		'dependencies' => array(
+			'jquery.ui.core',
+			'jquery.ui.widget',
+		),
 		'skinStyles' => array(
 			'default' => 'resources/lib/jquery.ui/themes/smoothness/jquery.ui.datepicker.css',
 		),

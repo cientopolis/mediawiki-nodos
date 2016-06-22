@@ -202,6 +202,3 @@ $sfgDatePickerSettings['WeekStart'] = '1';
 $sfgDatePickerSettings['DisableInputField'] = false;
 
 $sfgLinkAllRedLinksToForms = true;
-
-
-
