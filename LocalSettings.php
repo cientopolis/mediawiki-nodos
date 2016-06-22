@@ -133,6 +133,15 @@ wfLoadSkin( 'Modern' );
 wfLoadSkin( 'MonoBook' );
 wfLoadSkin( 'Vector' );
 
+#email notifications
+$wgSMTP = array(
+    'host'     => $config['emailHost'],
+    'IDHost'   => $config['emailIDHost'],
+    'port'     => $config['emailPort'],
+    'username' => $config['emailUser'],
+    'password' => $config['emailPass'],
+    'auth'     => $config['emailAuth']
+);
 
 # End of automatically generated settings.
 # Add more configuration options below.
