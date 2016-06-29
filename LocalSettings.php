@@ -114,9 +114,9 @@ $wgUpgradeKey = "4878167608c816c9";
 ## For attaching licensing metadata to pages, and displaying an
 ## appropriate copyright notice / icon. GNU Free Documentation
 ## License and Creative Commons licenses are supported so far.
-$wgRightsPage = ""; # Set to the title of a wiki page that describes your license/copyright
-$wgRightsUrl = "";
-$wgRightsText = "";
+$wgRightsPage = "Adherí al Pacto"; # Set to the title of a wiki page that describes your license/copyright
+$wgRightsUrl = "http://creativecommons.org/licenses/by-sa/3.0/";
+$wgRightsText = "Creative Commons Atribución-Compartir Igual. Con algunos detalles";
 $wgRightsIcon = "";
 
 # Path to the GNU diff3 utility. Used for conflict resolution.
@@ -194,7 +194,7 @@ require_once("$IP/extensions/LocalS3Repo/LocalS3Repo.php");
 $wgGroupPermissions['*']['createaccount'] = false;
 $wgGroupPermissions['*']['viewedittab'] = false;
 $wgGroupPermissions['*']['edit'] = false;
-$wgGroupPermissions['*']['read'] = false;
+$wgGroupPermissions['*']['read'] = true;
 $wgGroupPermissions['user']['viewedittab'] = false;
 $wgGroupPermissions['user']['createpage'] = false;
 $wgGroupPermissions['sysop']['viewedittab'] = true;
