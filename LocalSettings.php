@@ -115,9 +115,9 @@ $wgUpgradeKey = "4878167608c816c9";
 ## appropriate copyright notice / icon. GNU Free Documentation
 ## License and Creative Commons licenses are supported so far.
 $wgRightsPage = "Adherí al Pacto"; # Set to the title of a wiki page that describes your license/copyright
-$wgRightsUrl = "http://creativecommons.org/licenses/by-sa/3.0/";
+$wgRightsUrl = "http://creativecommons.org/licenses/by-sa/4.0/";
 $wgRightsText = "Creative Commons Atribución-Compartir Igual. Con algunos detalles";
-$wgRightsIcon = "";
+$wgRightsIcon = "$wgResourceBasePath/resources/assets/licenses/cc-by-sa.png";
 
 # Path to the GNU diff3 utility. Used for conflict resolution.
 $wgDiff3 = "/usr/bin/diff3";
