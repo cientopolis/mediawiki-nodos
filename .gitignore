@@ -4,3 +4,4 @@ vendor
 .idea
 LocalSettings.php.bk
 vendor/composer/LICENCE
+*.log
