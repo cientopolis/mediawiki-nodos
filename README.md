@@ -1,2 +1,2 @@
 # mediawiki-nodos
-Mediawiki installation for the Nodos project
+Código principal de la wiki Nodos
