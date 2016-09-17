@@ -1,0 +1,3 @@
+[submodule "skins/Nodos"]
+	path = skins/Nodos
+	url = git@github.com:cientopolis/nodos-skin.git
