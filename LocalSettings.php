@@ -148,7 +148,7 @@ enableSemantics( 'plataformanodos.org' );
 require_once "$IP/extensions/SemanticForms/SemanticForms.php";
 require_once("$IP/extensions/SemanticFormsInputs/SemanticFormsInputs.php");
 require_once("$IP/extensions/SemanticExtraSpecialProperties/SemanticExtraSpecialProperties.php");
-require_once("$IP/extensions/SemanticInternalObjects/SemanticInternalObjects.php");	
+require_once("$IP/extensions/SemanticInternalObjects/SemanticInternalObjects.php");
 
 wfLoadExtension( 'ParserFunctions' );
 
@@ -187,16 +187,13 @@ $wgLocalFileRepo = array(
 );
 require_once("$IP/extensions/LocalS3Repo/LocalS3Repo.php");
 
-$wgGroupPermissions['*']['createaccount'] = false;
+$wgGroupPermissions['*']['createaccount'] = $config['createAccount'] || false;
 $wgGroupPermissions['*']['viewedittab'] = false;
 $wgGroupPermissions['*']['edit'] = false;
 $wgGroupPermissions['*']['read'] = true;
 $wgGroupPermissions['user']['viewedittab'] = false;
 $wgGroupPermissions['user']['createpage'] = false;
 $wgGroupPermissions['sysop']['viewedittab'] = true;
-
-$wgNamespaceProtection[NS_SPECIAL] = array('editinterface');
-
 
 //renames the "Edit with form" tab to "edit", and the "edit" tab to "edit source"
 $sfgRenameEditTabs = true;
@@ -207,3 +204,25 @@ $sfgDatePickerSettings['WeekStart'] = '1';
 $sfgDatePickerSettings['DisableInputField'] = false;
 
 $sfgLinkAllRedLinksToForms = true;
+
+//Sign up
+
+$wgEmailAuthentication = true;
+$wgEmailConfirmToEdit = true;
+
+wfLoadExtensions( array( 'ConfirmEdit', 'ConfirmEdit/ReCaptchaNoCaptcha' ) );
+$wgCaptchaClass = 'ReCaptchaNoCaptcha';
+$wgReCaptchaSiteKey = $config['captchaPublicKey'];
+$wgReCaptchaSecretKey = $config['captchaPrivateKey'];
+
+$wgGroupPermissions['*']['skipcaptcha']             = false;
+$wgGroupPermissions['user']['skipcaptcha']          = false;
+$wgGroupPermissions['autoconfirmed']['skipcaptcha'] = false;
+$wgGroupPermissions['bot']['skipcaptcha']           = true; // registered bots
+$wgGroupPermissions['sysop']['skipcaptcha']         = true;
+
+$wgCaptchaTriggers['edit']                          = false;
+$wgCaptchaTriggers['create']                        = false;
+$wgCaptchaTriggers['addurl']                        = true;
+$wgCaptchaTriggers['createaccount']                 = true;
+$wgCaptchaTriggers['badlogin']                      = true;
