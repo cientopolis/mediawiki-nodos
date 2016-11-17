@@ -145,8 +145,9 @@ $wgSMTP = array(
 require_once "$IP/extensions/SemanticMediaWiki/SemanticMediaWiki.php";
 enableSemantics( 'plataformanodos.org' );
 
-require_once "$IP/extensions/SemanticForms/SemanticForms.php";
-require_once("$IP/extensions/SemanticFormsInputs/SemanticFormsInputs.php");
+require_once "$IP/extensions/PageForms/PageForms.php";
+
+//require_once("$IP/extensions/SemanticFormsInputs/SemanticFormsInputs.php");
 require_once("$IP/extensions/SemanticExtraSpecialProperties/SemanticExtraSpecialProperties.php");
 require_once("$IP/extensions/SemanticInternalObjects/SemanticInternalObjects.php");
 
@@ -196,14 +197,15 @@ $wgGroupPermissions['user']['createpage'] = false;
 $wgGroupPermissions['sysop']['viewedittab'] = true;
 
 //renames the "Edit with form" tab to "edit", and the "edit" tab to "edit source"
-$sfgRenameEditTabs = true;
+$wgPageFormsRenameEditTabs = true;
 
 //Calendar global configuration
-$sfgDatePickerSettings['DateFormat'] = 'dd/mm/yy';
-$sfgDatePickerSettings['WeekStart'] = '1';
-$sfgDatePickerSettings['DisableInputField'] = false;
+$wgPageFormsDatePickerSettings['DateFormat'] = 'dd/mm/yy';
+$wgPageFormsDatePickerSettings['WeekStart'] = '1';
+$wgPageFormsDatePickerSettings['DisableInputField'] = false;
 
-$sfgLinkAllRedLinksToForms = true;
+$wgPageFormsLinkAllRedLinksToForms = true;
+
 
 //Sign up
 
@@ -226,3 +228,6 @@ $wgCaptchaTriggers['create']                        = false;
 $wgCaptchaTriggers['addurl']                        = true;
 $wgCaptchaTriggers['createaccount']                 = true;
 $wgCaptchaTriggers['badlogin']                      = true;
+
+
+$wgLocaltimezone = 'America/Argentina/Buenos_Aires';
