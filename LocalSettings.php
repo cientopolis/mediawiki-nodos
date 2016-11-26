@@ -147,7 +147,6 @@ enableSemantics( 'plataformanodos.org' );
 
 require_once "$IP/extensions/PageForms/PageForms.php";
 
-//require_once("$IP/extensions/SemanticFormsInputs/SemanticFormsInputs.php");
 require_once("$IP/extensions/SemanticExtraSpecialProperties/SemanticExtraSpecialProperties.php");
 require_once("$IP/extensions/SemanticInternalObjects/SemanticInternalObjects.php");
 
