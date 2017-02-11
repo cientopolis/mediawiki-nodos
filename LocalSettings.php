@@ -254,13 +254,20 @@ $wgFooterIcons = array(
             "width" => "",
             "url" => "http://www.lifia.info.unlp.edu.ar/"
         ),
-        "unlp" => array(
+        "unlpinfo" => array(
+            "src" => "$wgResourceBasePath/resources/assets/footer/logo-inforamtica-unlp.png",
+            "alt" => "Facultad de Informática - Universidad Nacional de La Plata",
+            "height" => 50,
+            "width" => "",
+            "url" => "http://info.unlp.edu.ar/"
+        ),
+        /*"unlp" => array(
             "src" => "$wgResourceBasePath/resources/assets/footer/unlpbackgroundless.png",
             "alt" => "Universidad Nacional de La Plata",
             "height" => 50,
             "width" => "",
-            "url" => "http://info.unlp.edu.ar/"
-        )
+            "url" => "http://www.unlp.edu.ar/"
+        ),*/
     ),
     "poweredby" => array(
         "mediawiki" => array(
@@ -272,6 +279,13 @@ $wgFooterIcons = array(
             'src' =>  $wgResourceBasePath . '/extensions/SemanticMediaWiki/res/images/smw_button.png',
             'url' => 'https://www.semantic-mediawiki.org/wiki/Semantic_MediaWiki',
             'alt' => 'Powered by Semantic MediaWiki'
+        )
+    ),
+    "copyright" => array(
+        "copyright" => array(
+            'src' =>  "$wgResourceBasePath/resources/assets/licenses/cc-by-sa.png",
+            'url' => 'http://creativecommons.org/licenses/by-sa/4.0/',
+            'alt' => 'Creative Commons'
         )
     )
 );
