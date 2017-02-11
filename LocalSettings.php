@@ -230,3 +230,48 @@ $wgCaptchaTriggers['badlogin']                      = true;
 
 
 $wgLocaltimezone = 'America/Argentina/Buenos_Aires';
+$wgExternalLinkTarget = '_blank';
+$wgFooterIcons = array(
+    "custom" => array(
+        "gec" => array(
+            "src" => "$wgResourceBasePath/resources/assets/footer/gecLogo.png",
+            "alt" => "Grupo de Estudio sobre el Cuerpo",
+            "height" => 50,
+            "width" => "",
+            "url" => "http://grupodeestudiosobrecuerpo.blogspot.com.ar/"
+        ),
+        "cientopolis" => array(
+            "src" => "$wgResourceBasePath/resources/assets/footer/cientopolis.png",
+            "alt" => "Cientópolis",
+            "height" => 50,
+            "url" => "https://www.cientopolis.org/",
+            "width" => ""
+        ),
+        "lifia" => array(
+            "src" => "$wgResourceBasePath/resources/assets/footer/lifia.png",
+            "alt" => "Lifia",
+            "height" => 50,
+            "width" => "",
+            "url" => "http://www.lifia.info.unlp.edu.ar/"
+        ),
+        "unlp" => array(
+            "src" => "$wgResourceBasePath/resources/assets/footer/unlpbackgroundless.png",
+            "alt" => "Universidad Nacional de La Plata",
+            "height" => 50,
+            "width" => "",
+            "url" => "http://info.unlp.edu.ar/"
+        )
+    ),
+    "poweredby" => array(
+        "mediawiki" => array(
+            "src" => null, // Defaults to "$wgStylePath/common/images/poweredby_mediawiki_88x31.png"
+            "url" => "https://www.mediawiki.org/",
+            "alt" => "Powered by MediaWiki"
+            ),
+        "semanticmediawiki" => array(
+            'src' =>  $wgResourceBasePath . '/extensions/SemanticMediaWiki/res/images/smw_button.png',
+            'url' => 'https://www.semantic-mediawiki.org/wiki/Semantic_MediaWiki',
+            'alt' => 'Powered by Semantic MediaWiki'
+        )
+    )
+);
