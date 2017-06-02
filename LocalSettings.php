@@ -211,6 +211,8 @@ $wgPageFormsLinkAllRedLinksToForms = true;
 $wgEmailAuthentication = true;
 $wgEmailConfirmToEdit = true;
 
+wfLoadExtension( 'Nodos' );
+
 wfLoadExtensions( array( 'ConfirmEdit', 'ConfirmEdit/ReCaptchaNoCaptcha' ) );
 $wgCaptchaClass = 'ReCaptchaNoCaptcha';
 $wgReCaptchaSiteKey = $config['captchaPublicKey'];
