@@ -34,7 +34,8 @@
 		"zordius/lightncandy": "0.21",
 		"mediawiki/maps": "*",
 		"mediawiki/semantic-maps": "*",
-		"aws/aws-sdk-php": "^3.15"
+		"aws/aws-sdk-php": "^3.15",
+		"mediawiki/semantic-result-formats": "2.4.*"
 	},
 	"require-dev": {
 		"jakub-onderka/php-parallel-lint": "0.9",
