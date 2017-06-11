@@ -5,6 +5,7 @@
  * @file
  * @ingroup Extensions
  */
+require_once ('ImportNodos.php');
 
 class SpecialNodos extends SpecialPage {
 	public function __construct() {
@@ -34,9 +35,10 @@ class SpecialNodos extends SpecialPage {
 		$htmlForm->show();
 	}
 
-	static function trySubmit( $formData ) {
-        
-		return 'HAHA FAIL';
+	static function trySubmit() {
+        $nodosOntology = $_SERVER['DOCUMENT_ROOT'] . '/extensions/nodos/data/NodosOntology.xml';
+        $nodosImporter = new ImportNodos();
+        return $nodosImporter->doImport($nodosOntology);;
 	}
 }
 
