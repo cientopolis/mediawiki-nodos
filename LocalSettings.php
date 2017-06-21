@@ -206,6 +206,9 @@ $wgPageFormsDatePickerSettings['DisableInputField'] = false;
 $wgPageFormsLinkAllRedLinksToForms = true;
 
 
+wfLoadExtension( 'EmbedVideo' );
+
+
 //Sign up
 
 $wgEmailAuthentication = true;
