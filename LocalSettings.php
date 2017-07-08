@@ -231,6 +231,10 @@ $wgCaptchaTriggers['addurl']                        = true;
 $wgCaptchaTriggers['createaccount']                 = true;
 $wgCaptchaTriggers['badlogin']                      = true;
 
+//deshabilitar captcha para usuarios que confirmaron
+$wgGroupPermissions['emailconfirmed']['skipcaptcha'] = true;
+$ceAllowConfirmedEmail = true;
+
 
 $wgLocaltimezone = 'America/Argentina/Buenos_Aires';
 $wgExternalLinkTarget = '_blank';
