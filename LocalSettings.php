@@ -45,6 +45,8 @@ $wgResourceBasePath = $wgScriptPath;
 ## or else you'll overwrite your logo when you upgrade!
 $wgLogo = "$wgResourceBasePath/resources/assets/logoNodos.png";
 
+$wgFavicon = "$wgResourceBasePath/resources/assets/favicon.ico";
+
 ## UPO means: this is also a user preference option
 
 $wgEnableEmail = true;
